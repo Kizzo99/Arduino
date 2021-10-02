@@ -18,7 +18,7 @@ void loop()
   // (note: line 1 is the second row, since counting begins with 0):
   lcd.setCursor(0, 0);
   // print the number of seconds left on timer:
-  for (int thisChar = 9; thisChar > 0; thisChar--) 
+  for (int thisChar = 10; thisChar > 0; thisChar--) 
   {
     lcd.clear();  
   // set the cursor to column 0, line 1
