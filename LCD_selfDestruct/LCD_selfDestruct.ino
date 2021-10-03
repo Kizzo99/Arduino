@@ -20,6 +20,13 @@ void loop()
   // print the number of seconds left on timer:
   for (int thisChar = 10; thisChar > 0; thisChar--) 
   {
+    if (thisChar == 1)
+    {
+      lcd.setCursor (0,0);
+      lcd.print ("BOOM");
+    }
+      else
+      {
     lcd.clear();  
   // set the cursor to column 0, line 1
   // (note: line 1 is the second row, since counting begins with 0):
@@ -33,6 +40,7 @@ void loop()
   lcd.setCursor(0, 0);
   lcd.print(thisChar);
   delay(1000);
-  }
   lcd.clear();
+    }
+  }
 }
