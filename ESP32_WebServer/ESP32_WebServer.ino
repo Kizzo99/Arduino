@@ -1,3 +1,11 @@
+// include the library code:
+#include <LiquidCrystal.h>
+
+// initialize the library by associating any needed LCD interface pin
+// with the arduino pin number it is connected to
+const int rs = 13, en = 32, d4 = 25, d5 = 26, d6 = 27, d7 = 14;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
 // Load Wi-Fi library
 #include <WiFi.h>
 
@@ -21,7 +29,7 @@ const int output26 = 2;
 // Current time
 unsigned long currentTime = millis();
 // Previous time
-unsigned long previousTime = 0; 
+unsigned long previousTime = 0;
 // Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
 
@@ -39,7 +47,16 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    digitalWrite(output26, HIGH);
+    // set up the LCD's number of columns and rows:
+    lcd.begin(16, 2);
+    lcd.setCursor(0, 0);
+    // Print a message to the LCD.
+    lcd.print("Connecting...");
   }
+  digitalWrite(output26, LOW);
+  lcd.clear();
+  lcd.print("Connected");
   // Print local IP address and start web server
   Serial.println("");
   Serial.println("WiFi connected.");
@@ -48,7 +65,7 @@ void setup() {
   server.begin();
 }
 
-void loop(){
+void loop() {
   WiFiClient client = server.available();   // Listen for incoming clients
 
   if (client) {                             // If a new client connects,
@@ -72,7 +89,7 @@ void loop(){
             client.println("Content-type:text/html");
             client.println("Connection: close");
             client.println();
-            
+
             // turns the GPIOs on and off
             if (header.indexOf("GET /2/on") >= 0) {
               Serial.println("GPIO 2 on");
@@ -82,33 +99,33 @@ void loop(){
               Serial.println("GPIO 2 off");
               output26State = "off";
               digitalWrite(output26, LOW);
-            } 
-            
+            }
+
             // Display the HTML web page
             client.println("<!DOCTYPE html><html>");
             client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
             client.println("<link rel=\"icon\" href=\"data:,\">");
-            // CSS to style the on/off buttons 
+            // CSS to style the on/off buttons
             // Feel free to change the background-color and font-size attributes to fit your preferences
             client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
             client.println(".button { background-color: #555555; border: none; width:100%; color: white; padding: 16px 40px; border-radius: 12px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);");
             client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-            client.println(".button2 {background-color: #4CAF50;}</style></head>");           
-            
+            client.println(".button2 {background-color: #4CAF50;}</style></head>");
+
             // Web Page Heading
             client.println("<body><h1>ESP32 Web Server Test</h1>");
-            
-            // Display current state, and ON/OFF buttons for GPIO 2  
+
+            // Display current state, and ON/OFF buttons for GPIO 2
             client.println("<p>GPIO 2 - State " + output26State + "</p>");
-            // If the output26State is off, it displays the ON button       
-            if (output26State=="off") {
+            // If the output26State is off, it displays the ON button
+            if (output26State == "off") {
               client.println("<p><a href=\"/2/on\"><button class=\"button\">LED</button></a></p>");
             } else {
               client.println("<p><a href=\"/2/off\"><button class=\"button button2\">LED</button></a></p>");
-            } 
-               
+            }
+
             client.println("</body></html>");
-            
+
             // The HTTP response ends with another blank line
             client.println();
             // Break out of the while loop
