@@ -7,22 +7,12 @@ const int RS = 12, E = 11, D4 = 5, D5 = 4, D6 = 3, D7 = 2;
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 
   uint16_t tick = 13;
-  uint16_t contrastGround= 9;
-  uint16_t redLED = 8;
-  uint16_t switchIO = 7;
-  uint16_t powerIn = 6;
-  uint16_t tickDelay = 100;
-  uint16_t countDownTime;
 
 void setup() 
 {
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
   pinMode(tick, OUTPUT);
-  pinMode(contrastGround, OUTPUT);
-  pinMode(redLED, OUTPUT);
-  pinMode(switchIO, INPUT);
-  pinMode(powerIn, OUTPUT);
 }
 
 void loop() 
@@ -35,33 +25,24 @@ void loop()
   {
     if (thisChar == 0)
     {
-      tone(tick, 50);
       lcd.setCursor (6,0);
       lcd.print ("BOOM");
-      digitalWrite(redLED, HIGH);
       delay(500);
       lcd.clear();
-      digitalWrite(redLED, LOW);
       delay(500);
       lcd.setCursor (6,0);
       lcd.print ("BOOM");
-      digitalWrite(redLED, HIGH);
       delay(500);
       lcd.clear();
-      digitalWrite(redLED, LOW);
       delay(500);
       lcd.setCursor (6,0);
       lcd.print ("BOOM");
-      digitalWrite(redLED, HIGH);
       delay(500);
       lcd.clear();
-      digitalWrite(redLED, LOW);
       delay(500);
       lcd.setCursor (6,0); 
       lcd.print ("BOOM");
-      digitalWrite(redLED, HIGH);
       delay(500);
-      noTone(tick);
     }
     else
     {
@@ -77,12 +58,8 @@ void loop()
 
   lcd.setCursor(0, 0);
   lcd.print(thisChar);
-  tone(tick, 8000);
-  delay(tickDelay);
-  noTone(tick);
-  delay(1000 - tickDelay);
+  delay(1000);
   lcd.clear();
-  noTone(tick);
     }
   }
 }
